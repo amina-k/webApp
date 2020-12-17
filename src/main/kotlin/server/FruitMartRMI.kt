@@ -7,7 +7,17 @@ import java.rmi.RemoteException
 @JsonSerialize
 interface FruitMartRMI : Remote {
     @Throws(RemoteException::class)
-    fun addPrice(request: Map<String, String>): String
+    fun addItem(dbItem: Map<String, Any>): String
+
+    @Throws(RemoteException::class)
+    fun updatePrice(dbItem: Map<String, Any>): String
+
+    @Throws(RemoteException::class)
+    fun deleteItem(dbItem: Map<String, Any>): String
+
+    @Throws(RemoteException::class)
+    fun calcItemCost(dbItem: Map<String, Any>): String
+
 }
 
 

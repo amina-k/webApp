@@ -1,11 +1,10 @@
 package client
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import dtos.CartItem
-import dtos.FetchedItem
 import dtos.Item
-import org.json.JSONObject
 import server.FruitMartRMI
 import java.net.MalformedURLException
 import java.rmi.Naming
@@ -21,7 +20,6 @@ import khttp.get as httpGet
 import khttp.post as httpPost
 import khttp.put as httpPut
 
-const val baseRDBUrl = "https://fruitmart-ad2a6-default-rtdb.europe-west1.firebasedatabase.app/"
 val mapper = ObjectMapper()
 
 
@@ -45,48 +43,30 @@ class HomeController : HttpServlet() {
         try {
             when (path) {
                 "/addPrice" -> {
-                    mapper.readValue(req.inputStream) as Item// To ensure correct parameters are passed
-                    val itemMap: Map<String, String> =
-                        mapper.readValue(req.inputStream) // To ensure correct parameters are passed
-                    response = vendorOps!!.addPrice(itemMap)
+                    val item: Item = mapper.readValue(req.inputStream)
+                    val itemMap = createDBItem(item, "add")
+                    response = vendorOps!!.addItem(itemMap)
                 }
 
                 "/updatePrice" -> {
                     val item: Item = mapper.readValue(req.inputStream)
-                    val dbItem = httpGet("""${baseRDBUrl}items.json?&orderBy="name"&equalTo="${item.name}"""")
-                    val fetchedItem = FetchedItem(indexedItem = mapper.readValue(dbItem.content))
+                    val itemMap = createDBItem(item, "update")
+                    response = vendorOps!!.updatePrice(itemMap)
 
-                    response = httpPut(
-                        "${baseRDBUrl}items/${fetchedItem.indexedItem.keys.first()}/price.json",
-                        data = item.price
-                    ).toString()
                 }
 
                 "/deleteItem" -> {
                     val item: Item = mapper.readValue(req.inputStream)
-                    val dbItem = httpGet("""${baseRDBUrl}items.json?&orderBy="name"&equalTo="${item.name}"""")
-                    val fetchedItem = FetchedItem(indexedItem = mapper.readValue(dbItem.content))
+                    val itemMap = createDBItem(item, "delete")
+                    response = vendorOps!!.deleteItem(itemMap)
 
-                    response = httpDelete(
-                        "${baseRDBUrl}items/${fetchedItem.indexedItem.keys.first()}.json",
-                        data = item.price
-                    ).toString()
+
                 }
 
-                "/calItemCost" -> {
+                "/calcItemCost" -> {
                     val cartItem: CartItem = mapper.readValue(req.inputStream)
-                    val dbItem = httpGet("""${baseRDBUrl}items.json?&orderBy="name"&equalTo="${cartItem.name}"""")
-                    val fetchedItem = FetchedItem(indexedItem = mapper.readValue(dbItem.content))
-                    val itemDetails = fetchedItem.indexedItem.values.first()!!
-
-                    response = JSONObject(
-                        mapOf(
-                            "name" to itemDetails.name!!,
-                            "pricePerUnit" to itemDetails.price.toString(),
-                            "totalCost" to (itemDetails.price!! * cartItem.quantity!!).toString()
-                        )
-                    )
-                        .toString()
+                    val itemMap = validateCartItem(cartItem)
+                    response = vendorOps!!.calcItemCost(itemMap)
                 }
             }
 
@@ -95,5 +75,47 @@ class HomeController : HttpServlet() {
 //            throw exception
         }
         return response
+    }
+
+    private fun createDBItem(item: Item, action: String): Map<String, Any> {
+        // Data validation for add and update
+        when (action) {
+            "add" -> {
+                val missing = null
+                val validationError = "Validation error: Missing Parameter"
+                when (missing) {
+                    item.name -> error("$validationError name")
+                    item.price -> error("$validationError price")
+                    item.unit -> error("$validationError unit")
+                }
+            }
+            "update" -> {
+                val missing = null
+                val validationError = "Validation error: Missing Parameter"
+                when (missing) {
+                    item.name -> error("$validationError name")
+                    item.price -> error("$validationError price")
+                }
+            }
+            "delete" -> {
+                val missing = null
+                val validationError = "Validation error: Missing Parameter"
+                if (missing == item.name) error("$validationError name")
+            }
+
+        }
+        return mapper.convertValue(item, object : TypeReference<Map<String, Any>>() {})
+
+    }
+
+    private fun validateCartItem(cartItem: CartItem): Map<String, Any> {
+        val missing = null
+        val validationError = "Validation error: Missing Parameter"
+        when (missing) {
+            cartItem.name -> error("$validationError name")
+            cartItem.quantity -> error("$validationError quantity")
+        }
+        return mapper.convertValue(cartItem, object : TypeReference<Map<String, Any>>() {})
+
     }
 }
