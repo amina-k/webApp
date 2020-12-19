@@ -1,22 +1,31 @@
 package server
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import dtos.CartItem
+import dtos.FetchedItem
+import dtos.Item
 import java.rmi.Remote
 import java.rmi.RemoteException
 
 @JsonSerialize
 interface FruitMartRMI : Remote {
     @Throws(RemoteException::class)
-    fun addItem(dbItem: Map<String, Any>): String
+    fun fetchItem(name: String): FetchedItem?
 
     @Throws(RemoteException::class)
-    fun updatePrice(dbItem: Map<String, Any>): String
+    fun fetchAllItems(): String
 
     @Throws(RemoteException::class)
-    fun deleteItem(dbItem: Map<String, Any>): String
+    fun addItem(dbItem: Item): String
 
     @Throws(RemoteException::class)
-    fun calcItemCost(dbItem: Map<String, Any>): String
+    fun updatePrice(dbItem: Item): String
+
+    @Throws(RemoteException::class)
+    fun deleteItem(dbItem: Item): String
+
+    @Throws(RemoteException::class)
+    fun calcItemCost(dbItem: CartItem): String
 
 }
 

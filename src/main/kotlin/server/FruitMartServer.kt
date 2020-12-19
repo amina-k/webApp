@@ -16,7 +16,7 @@ class FruitMartServer : FruitMartServiceImpl() {
             val registry = LocateRegistry.createRegistry(1099)
 
             registry.bind("FruitMart", stub)
-            System.err.println("Server ready")
+            println("Server ready")
 
         }
     }
