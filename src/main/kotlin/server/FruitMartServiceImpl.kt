@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import dtos.CartItem
 import dtos.FetchedItem
 import dtos.Item
+import dtos.Orders
 import getErrorResponse
 import getSuccessResponse
 import org.json.JSONObject
@@ -39,7 +40,6 @@ open class FruitMartServiceImpl : FruitMartRMI {
 
         return if (response.statusCode == 200) getSuccessResponse(mapper.readValue(response.content)).toString() else getErrorResponse().toString()
     }
-
 
     override fun addItem(dbItem: Item): String {
 
@@ -89,7 +89,7 @@ open class FruitMartServiceImpl : FruitMartRMI {
         val fetchedItem = fetchItem(dbItem.name!!)!!
         val itemSpecifics = fetchedItem.indexedItem.values.first()!!
 
-        val response = JSONObject(
+        val response = getSuccessResponse(
             mapOf(
                 "name" to itemSpecifics.name!!,
                 "pricePerUnit" to itemSpecifics.price.toString(),
@@ -98,6 +98,30 @@ open class FruitMartServiceImpl : FruitMartRMI {
         )
         return response.toString()
     }
+
+
+    override fun fetchAllOrders(): String {
+
+        println("Fetching all orders from DB")
+
+        val response = httpGet(
+            "${baseRTDBUrl}orders.json"
+        )
+
+        return if (response.statusCode == 200) getSuccessResponse(mapper.readValue(response.content)).toString() else getErrorResponse().toString()
+    }
+
+    override fun addOrder(dbOrder: Orders): String {
+
+        println("Adding item and price to DB")
+
+        val response = httpPost(
+            "${baseRTDBUrl}orders.json",
+            json = JSONObject(dbOrder)
+        )
+        return if (response.statusCode == 200) getSuccessResponse().toString() else getErrorResponse().toString()
+    }
+
 
 }
 

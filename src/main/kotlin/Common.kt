@@ -4,7 +4,7 @@ fun getSuccessResponse(data: Map<String, Any>? = null): JSONObject {
     return JSONObject(
         mapOf(
             "status" to "200",
-            "message" to "sucess",
+            "message" to "success",
             "data" to data
         )
     )
@@ -14,7 +14,7 @@ fun getErrorResponse(): JSONObject {
     return JSONObject(
         mapOf(
             "status" to "200",
-            "message" to "sucess"
+            "message" to "success"
         )
     )
 }

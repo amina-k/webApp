@@ -1,10 +1,12 @@
 package client
 
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import dtos.CartItem
 import dtos.Item
+import dtos.Orders
 import getErrorResponse
 import getSuccessResponse
 import server.FruitMartRMI
@@ -31,10 +33,12 @@ class MainServlet : HttpServlet() {
 
     @Throws(MalformedURLException::class, RemoteException::class, NotBoundException::class)
     override fun doPost(req: HttpServletRequest, res: HttpServletResponse) {
+        println(req.servletPath)
         LocateRegistry.getRegistry(1099)
         vendorOps = Naming.lookup("FruitMart") as FruitMartRMI
-
-        return res.writer.write(processRequest(req).toString())
+        val resp = processRequest(req).toString()
+        println(resp)
+        return res.writer.write(resp)
     }
 
     @Throws(MalformedURLException::class, RemoteException::class, NotBoundException::class)
@@ -47,17 +51,19 @@ class MainServlet : HttpServlet() {
 
     private fun processRequest(req: HttpServletRequest): String? {
         val path = req.servletPath
+        mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
+
         var response: String? = null
 
         try {
             when (path) {
-                "/addPrice" -> {
+                "/addItem" -> {
                     val item: Item = mapper.readValue(req.inputStream)
                     validateItem(item, "add")
                     response = vendorOps!!.addItem(item)
                 }
 
-                "/updatePrice" -> {
+                "/updateItem" -> {
                     val item: Item = mapper.readValue(req.inputStream)
                     validateItem(item, "update")
                     response = vendorOps!!.updatePrice(item)
@@ -96,7 +102,15 @@ class MainServlet : HttpServlet() {
                     response = vendorOps!!.fetchAllItems()
                 }
 
+                "/fetchAllOrders" -> {
+                    response = vendorOps!!.fetchAllOrders()
+                }
 
+                "/addOrder" -> {
+                    val order: Orders = mapper.readValue(req.inputStream)
+                    println(order)
+                    response = vendorOps!!.addOrder(order)
+                }
             }
 
         } catch (exception: Exception) {
