@@ -18,19 +18,21 @@ For purposes of testing, the android app was run on an emulator
 To enable the connection, [ngrok](https://ngrok.com/docs) was used to expose the client endpoints to the internet
 
 ##### Avaiiable Endpoints
-- /addItem
-- /updateItem
-- /deleteItem
-- /calcItemCost
-- /fetchAllItems
-- /fetchAllOrders
-- /addOrder
+>- /addItem
+>- /updateItem
+>- /deleteItem
+>- /calcItemCost
+>- /fetchAllItems
+>- /fetchAllOrders
+>- /addOrder
 
-All the above call tasks implemented on the serverImplemntation class `FruitMartServiceImpl` which extends the remote interface `FruitMartRMI`
+The endpoints can be reached through `localhost:8084` once the server and client are running
 
-The server class `FruitMartServer` binds an  instance of the serverImplementation  class to a  registry running on port `1099` (default port)
+All the endpoints call tasks implemented on the serverImplemntation class [`FruitMartServiceImpl`](https://github.com/amina-k/webApp/blob/master/src/main/kotlin/server/FruitMartServiceImpl.kt) which extends the remote interface [`FruitMartRMI`](https://github.com/amina-k/webApp/blob/master/src/main/kotlin/server/FruitMartRMI.kt)
 
-The client accesses the same registry and calls the server classes
+The server class [`FruitMartServer`](https://github.com/amina-k/webApp/blob/master/src/main/kotlin/server/FruitMartServer.kt) binds an  instance of the serverImplementation  class to a  registry running on port `1099` (default port)
+
+The client class [`MainServlet`](https://github.com/amina-k/webApp/blob/master/src/main/kotlin/client/MainServlet.kt) accesses the same registry and calls the server classes
 
 The server implementation communicates to the DB via the [firebase REST APIs](https://firebase.google.com/docs/database/rest/retrieve-data)
 
