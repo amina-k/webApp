@@ -54,6 +54,6 @@ Click the links below to view the application demos, through the app as well as 
 
 ##### Contributors
 
-[Lulu Karega](lulu.karega@strathmore.edu) 
+[Lulu Karega](lulu.karega@strathmore.edu) [Github](https://github.com/amina-k)
 
-[Mariam Mabinda](mariamabinda@gmail.com)
+[Mariam Mabinda](mariamabinda@gmail.com) [Github](https://github.com/Mariamabinda)
