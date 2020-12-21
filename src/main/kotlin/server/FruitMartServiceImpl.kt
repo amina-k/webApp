@@ -99,7 +99,6 @@ open class FruitMartServiceImpl : FruitMartRMI {
         return response.toString()
     }
 
-
     override fun fetchAllOrders(): String {
 
         println("Fetching all orders from DB")
@@ -113,7 +112,7 @@ open class FruitMartServiceImpl : FruitMartRMI {
 
     override fun addOrder(dbOrder: Orders): String {
 
-        println("Adding item and price to DB")
+        println("Adding order details to DB")
 
         val response = httpPost(
             "${baseRTDBUrl}orders.json",
