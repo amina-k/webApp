@@ -52,8 +52,28 @@ Click the links below to view the application demos, through the app as well as 
 
 [Postman Demo](https://drive.google.com/file/d/190EwfHnWn3wRUR-t2Rk36aZPzLbsYiCx/view)
 
+##### Screenshots
+###### Splash Screen
+![Alt text](https://github.com/amina-k/androidApp/blob/master/app/src/main/res/demo-images/splash.png?raw=true "Splash Screen")
+
+###### Price List
+![Alt text](https://github.com/amina-k/androidApp/blob/master/app/src/main/res/demo-images/price_list.png?raw=true "Price List")
+
+###### Order List
+![Alt text](https://github.com/amina-k/androidApp/blob/master/app/src/main/res/demo-images/order_list.png?raw=true "Orders List")
+
+###### Add Item
+![Alt text](https://github.com/amina-k/androidApp/blob/master/app/src/main/res/demo-images/add_item.png?raw=true "Add Item")
+
+###### Create Order
+![Alt text](https://github.com/amina-k/androidApp/blob/master/app/src/main/res/demo-images/add_order.png?raw=true "Add Order")
+
+###### Receipt
+![Alt text](https://github.com/amina-k/androidApp/blob/master/app/src/main/res/demo-images/receipt.png?raw=true "Receipt")
+
+
 ##### Contributors
 
-[Lulu Karega](lulu.karega@strathmore.edu) [Github](https://github.com/amina-k)
-
-[Mariam Mabinda](mariamabinda@gmail.com) [Github](https://github.com/Mariamabinda)
+>Lulu Karega [Email](lulu.karega@strathmore.edu) | [Github](https://github.com/amina-k)
+>
+>Mariam Mabinda [Email](mariamabinda@gmail.com) | [Github](https://github.com/Mariamabinda)
